@@ -1,7 +1,9 @@
 import cv2
 
 # 얼굴과  검출을 위한 케스케이드 분류기 생성 
-face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
+frontal_face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_default.xml')
+
+profile_face_cascade = cv2.CascadeClassifier('./data/haarcascade_frontalface_alt2.xml')
 
 # 카메라 캡쳐 활성화
 cap = cv2.VideoCapture(0)
@@ -10,10 +12,16 @@ while cap.isOpened():
     rate = 15
     if ret:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # 얼굴 검출    
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, \
+        # 정면 얼굴 검출    
+        faces = frontal_face_cascade.detectMultiScale(gray, scaleFactor=1.3, \
                                         minNeighbors=5, minSize=(80,80))
-        for(x,y,w,h) in faces:
+        # 측면 얼굴 검출
+        profiles = profile_face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(80, 80))
+
+        # 모든 얼굴 리스트 통합
+        all_faces = list(faces) + list(profiles)
+
+        for(x,y,w,h) in all_faces:
             cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255,0),2)
             # 얼굴부분 가져오기
             face = img[y:y+h, x:x+w]
