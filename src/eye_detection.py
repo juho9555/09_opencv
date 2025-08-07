@@ -1,6 +1,7 @@
 # 2. 눈 랜드마크 검출하기
 import cv2
 import dlib
+import numpy as np
 
 # 얼굴 검출기와 랜드마크 검출기 생성
 detector = dlib.get_frontal_face_detector()
@@ -22,11 +23,18 @@ while cap.isOpened():
     for rect in faces:
         # 눈만 검출
         shape = predictor(gray, rect)
-        for i in Left_eye + Right_eye:
-            part = shape.part(i)
-            cv2.circle(frame, (part.x, part.y), 2, (0, 255, 255), -1)
-        
-        cv2.imshow('Eye landmark', frame)
+
+        # 왼쪽 눈 좌표 추출
+        Left_eye_pts = np.array([(shape.part(i).x, shape.part(i).y) for i in Left_eye])
+
+        # 오른쪽 눈 좌표 추출
+        Right_eye_pts = np.array([(shape.part(i).x, shape.part(i).y) for i in Right_eye])
+
+        # 눈 윤곽선 그리기
+        cv2.polylines(frame, [Left_eye_pts], isClosed=True, color=(0, 255, 0), thickness=1)
+        cv2.polylines(frame, [Right_eye_pts], isClosed=True, color=(0, 255, 0), thickness=1)
+
+        cv2.imshow('Eye Highlight', frame)
 
     if cv2.waitKey(1) == 27: # ESC키로 종료
             break
