@@ -34,7 +34,17 @@ while cap.isOpened():
         cv2.polylines(frame, [Left_eye_pts], isClosed=True, color=(0, 255, 0), thickness=1)
         cv2.polylines(frame, [Right_eye_pts], isClosed=True, color=(0, 255, 0), thickness=1)
 
-        cv2.imshow('Eye Highlight', frame)
+        # 왼쪽 눈 바운딩 박스 그리기
+        lx, ly = np.min(Left_eye_pts, axis=0)
+        rx, ry = np.max(Left_eye_pts, axis=0)
+        cv2.rectangle(frame, (lx, ly), (rx, ry), (0, 255, 0), 1)
+
+        # 오른쪽 눈 바운딩 박스 그리기
+        lx, ly = np.min(Right_eye_pts, axis=0)
+        rx, ry = np.max(Right_eye_pts, axis=0)
+        cv2.rectangle(frame, (lx, ly), (rx, ry), (0, 255, 0), 1)
+
+        cv2.imshow('Eye bounding box', frame)
 
     if cv2.waitKey(1) == 27: # ESC키로 종료
             break
