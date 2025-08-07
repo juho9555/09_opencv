@@ -15,11 +15,15 @@ while cap.isOpened():
         # 정면 얼굴 검출    
         faces = frontal_face_cascade.detectMultiScale(gray, scaleFactor=1.3, \
                                         minNeighbors=5, minSize=(80,80))
-        # 측면 얼굴 검출
+        # 왼쪽 측면 얼굴 검출
         profiles = profile_face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(80, 80))
 
+        # 오른쪽 측면 얼굴 검출
+        gray_flipped = cv2.flip(gray, 1)
+        faces_profile_flipped = profile_face_cascade.detectMultiScale(gray_flipped)
+
         # 모든 얼굴 리스트 통합
-        all_faces = list(faces) + list(profiles)
+        all_faces = list(faces) + list(profiles) + list(faces_profile_flipped)
 
         for(x,y,w,h) in all_faces:
             cv2.rectangle(img, (x,y), (x+w, y+h), (0, 255,0),2)
