@@ -1,4 +1,4 @@
-# 3. EAR 계산 및 실시간 화면 표시
+# 3-1. EAR 계산 및 실시간 화면 표시
 import cv2
 import dlib
 import numpy as np
