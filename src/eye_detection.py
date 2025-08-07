@@ -44,7 +44,16 @@ while cap.isOpened():
         rx, ry = np.max(Right_eye_pts, axis=0)
         cv2.rectangle(frame, (lx, ly), (rx, ry), (0, 255, 0), 1)
 
-        cv2.imshow('Eye bounding box', frame)
+        # 왼쪽 눈 중심점 계산 및 표시
+        center_left = np.mean(Left_eye_pts, axis=0).astype(int)
+        cv2.circle(frame, tuple(center_left), 2, (255, 0, 0), -1) # 파란 점
+
+        # 오른쪽 눈 중심점 계산 및 표시
+        center_right = np.mean(Right_eye_pts, axis=0).astype(int)
+        cv2.circle(frame, tuple(center_right), 2, (255, 0, 0), -1) # 파란 점
+
+
+        cv2.imshow('Eye center point', frame)
 
     if cv2.waitKey(1) == 27: # ESC키로 종료
             break
